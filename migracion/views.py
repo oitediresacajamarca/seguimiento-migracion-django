@@ -4,9 +4,7 @@ from django.http import JsonResponse
 from django.views import View
 import happybase
 
-connection = happybase.Connection('172.18.20.37',port=9092,protocol='compact', timeout=None,
-            autoconnect=True,
-            transport='framed',  # Default: 'buffered'  <---- Changed.
+connection = happybase.Connection('localhost',port=9092 # Default: 'buffered'  <---- Changed.
             )
 
 '''connection.create_table(
@@ -59,7 +57,7 @@ class migracion_con(View):
         
         print(str(int(anio)*100+int(mes)))
         
-        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=id_curso,id_indicador=291)
+        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=id_curso,id_indicador=291,id_actividad=209)
         print('taamaanaio')
         print(len(lista))
         '''
@@ -117,7 +115,6 @@ class migracion_con(View):
             table_i.put(item['numero_documento'],dicres)
         
         print(dicres.values())
-        
         
         
         
