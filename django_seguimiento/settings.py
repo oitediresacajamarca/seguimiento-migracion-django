@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = ['migracion',
+INSTALLED_APPS = [
+    'migracion','api_seguimiento',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,10 +79,18 @@ DATABASES = {
         "ENGINE": "mssql",
         "NAME": "risc_2030",
         "USER": "sa",
-        "PASSWORD": ".",
-        "HOST": "localhost",
+        "PASSWORD": "Intercambio1080",
+        "HOST": "172.18.20.25",
         "PORT": "1433",
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server"}
+        'OPTIONS': {
+        'driver': 'ODBC Driver 17 for SQL Server',
+        'host_is_server': True,
+        'MultipleActiveResultSets': False,
+        'Encrypt': True,
+        'TrustServerCertificate': False,
+        'Connection Timeout': 30,
+        'Persist Security Info': False,
+    },
     }
 }
 

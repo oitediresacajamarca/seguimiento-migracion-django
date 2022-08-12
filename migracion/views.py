@@ -4,7 +4,10 @@ from django.http import JsonResponse
 from django.views import View
 import happybase
 
-connection = happybase.Connection('localhost',port=9092)
+connection = happybase.Connection('172.18.20.37',port=9092,protocol='compact', timeout=None,
+            autoconnect=True,
+            transport='framed',  # Default: 'buffered'  <---- Changed.
+            )
 
 '''connection.create_table(
     'seguimiento',
@@ -15,14 +18,51 @@ connection = happybase.Connection('localhost',port=9092)
 # Create your views here.
 
 class migracion_con(View):
-    def get(self,request,agnio,mes):
+    
+    def get(self,request,agnio,mes,id_curso):
+        print(id_curso)
         anio = agnio
         mes = mes
         periodo=str(int(anio)*100+int(mes))
+        nombre_curso=''
+        indicador_min=0
+        indicador_max=199
+        if id_curso=='1':
+            nombre_curso='MATERNO'
+            indicador_min=0
+            indicador_max=100
+
+        if id_curso=='2':
+            nombre_curso='NINIO'
+            indicador_min=200
+            indicador_max=299
+            print(nombre_curso)
+        if id_curso=='3':
+            nombre_curso='ADOLECENTE'
+            indicador_min=300
+            indicador_max=399
+        if id_curso=='4':
+            nombre_curso='JOVEN'
+            indicador_min=400
+            indicador_max=499
+        if id_curso=='5':
+            nombre_curso='ADULTO'
+            indicador_min=500
+            indicador_max=599
+        if id_curso=='6':
+            nombre_curso='ADULTO_MAYOR'
+            indicador_min=600
+            indicador_max=699
+        print(nombre_curso)
+
+            
         
         print(str(int(anio)*100+int(mes)))
         
-        lista=SeguimientoNominalNinio.objects.filter(id_indicador=291,anio=agnio,mes=mes)
+        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=id_curso,id_indicador=291)
+        print('taamaanaio')
+        print(len(lista))
+        '''
         lis_u=lista.values('id_actividad','id_indicador').distinct()
 
         dic={}
@@ -33,27 +73,47 @@ class migracion_con(View):
         
         print(dic)
         '''
-        connection.create_table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO',dic)
-        '''
-        table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO')
+       
+        try :
+     
+            connection.create_table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso,{'CMI_2022':{}})
+
+        except:
+            print('ya existe la tabla')
+     
+        
+        table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
         dicres={}
+        print('columnas generadas')
 
         for item in lista.values():
             print(item)
-            dicres[str(item['id_indicador'])+'_'+str(item['id_actividad'])+':ipress']=item['renipress']
+            dicres={}
+            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_ipress']=item['renipress']
 
             if(item['fecha_atencion'] is None):
                 item['fecha_atencion']=''
             else :
                 item['fecha_atencion']=item['fecha_atencion'].strftime('%d-%m-%Y')
+            
+            if(item['id_cita'] is None):
+                item['id_cita']=''
+            else :
+                item['id_cita']=item['id_cita']
+            
+            if(item['id_indicador'] is None):
+                item['id_indicador']=''
+            else :
+                item['id_indicador']=item['id_indicador']
 
             
             
-            dicres[str(item['id_indicador'])+'_'+str(item['id_actividad'])+':fecha atencion']=item['fecha_atencion']
+            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_fecha atencion']=item['fecha_atencion']
             
-            dicres[str(item['id_indicador'])+'_'+str(item['id_actividad'])+':cumple']=item['cumple']
+            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_cumple']=item['cumple']
            
-            dicres[str(item['id_indicador'])+'_'+str(item['id_actividad'])+':id_cita']=item['id_cita']
+            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_id_cita']=item['id_cita']
+            
             table_i.put(item['numero_documento'],dicres)
         
         print(dicres.values())
