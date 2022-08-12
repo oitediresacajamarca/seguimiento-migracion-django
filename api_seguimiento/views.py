@@ -6,7 +6,7 @@ from django.http import JsonResponse
 import happybase
 import json
 
-connection = happybase.Connection('localhost',port=9092)
+connection = happybase.Connection('localhost',port=9092 ,autoconnect=True,protocol = 'compact',timeout = 5000)
 
 class consulta(View):
     def get(self, request,agnio,mes,ipress):

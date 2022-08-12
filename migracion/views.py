@@ -4,8 +4,7 @@ from django.http import JsonResponse
 from django.views import View
 import happybase
 
-connection = happybase.Connection('localhost',port=9092 # Default: 'buffered'  <---- Changed.
-            )
+connection = happybase.Connection('localhost',port=9092 ,autoconnect=True,protocol = 'compact',timeout = 5000)
 
 '''connection.create_table(
     'seguimiento',
