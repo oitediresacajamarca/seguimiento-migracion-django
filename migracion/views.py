@@ -72,12 +72,11 @@ class migracion_con(View):
         print(dic)
         '''
        
-        try :
-     
-            connection.create_table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso,{'CMI_2022':{}})
+        
+        print(periodo)
+        connection.create_table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso,{'CMI_2022':{}})
 
-        except:
-            print('ya existe la tabla')
+        
      
         
         table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
