@@ -3,41 +3,57 @@ from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
 # Create your views here.
-import happybase
+import happybase as hb
 import json
 
-connection = happybase.Connection('localhost',port=9092 ,autoconnect=True,protocol = 'compact',timeout = 5000)
 
 class consulta(View):
     def get(self, request,agnio,mes,ipress):
         periodo=str(int(agnio)*100+int(mes))
-        
-        table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO')
-       
-       
-        lisg={}
-        for key, data in table_i.scan(filter="SingleColumnValueFilter('291_207','ipress',=, 'binary:000004645')"):
-            dicc_data={}          
-            for key1,data1 in data.items():
-                print(key1.decode('utf-8'))
-                print(data1.decode('utf-8'))
-                dicc_data[key1.decode('utf-8')]=data1.decode('utf-8')
-            lisg[key.decode('utf-8')] =dicc_data
-           
-    
-
-
-        '''
-            lisg[key.decode('utf-8')]=json.dumps(data)
-            print('============================================================')
-            print(type(data))
+        try:
+            connection=self.Crea_coneccion()
             
-            print('============================================================')
-           
+            table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO')
         
-        '''
+        
+            lisg={}
+            for key, data in table_i.scan(filter="SingleColumnValueFilter('291_207','ipress',=, 'binary:000004645')"):
+                dicc_data={}          
+                for key1,data1 in data.items():
+                
+                    dicc_data[key1.decode('utf-8')]=data1.decode('utf-8')
+                    lisg[key.decode('utf-8')] =dicc_data
+            connection.close()
+            
+        except Exception as e:
+            print (e)
+            
+        
+
+
+            '''
+                lisg[key.decode('utf-8')]=json.dumps(data)
+                print('============================================================')
+                print(type(data))
+                
+                print('============================================================')
+            
+            
+            '''
 
 
         return JsonResponse(list(lisg.items()),safe=False)
+    
+    def Crea_coneccion(self):
+        try:
+            con=hb.Connection('localhost',port=9090 )
+            return con
+        except Exception as e:
+            print (e)
+            con.close()
+
+
+
+    
 
 

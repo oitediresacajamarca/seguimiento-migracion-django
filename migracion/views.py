@@ -2,9 +2,9 @@ from django.shortcuts import render
 from .models import SeguimientoNominalNinio
 from django.http import JsonResponse
 from django.views import View
-import happybase
+import happybase as hb
 
-connection = happybase.Connection('localhost',port=9092 ,autoconnect=True,protocol = 'compact',timeout = 5000)
+
 
 '''connection.create_table(
     'seguimiento',
@@ -14,12 +14,15 @@ connection = happybase.Connection('localhost',port=9092 ,autoconnect=True,protoc
 
 # Create your views here.
 
+
+
 class migracion_con(View):
     
     def get(self,request,agnio,mes,id_curso):
         print(id_curso)
         anio = agnio
         mes = mes
+        connection={}
         periodo=str(int(anio)*100+int(mes))
         nombre_curso=''
         indicador_min=0
@@ -56,9 +59,7 @@ class migracion_con(View):
         
         print(str(int(anio)*100+int(mes)))
         
-        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=id_curso,id_indicador=291,id_actividad=209)
-        print('taamaanaio')
-        print(len(lista))
+       
         '''
         lis_u=lista.values('id_actividad','id_indicador').distinct()
 
@@ -70,21 +71,19 @@ class migracion_con(View):
         
         print(dic)
         '''
-       
-        
+               
         print(periodo)
-        connection.create_table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso,{'CMI_2022':{}})
+        self.crea_tabla(period=periodo,nombre_curs=nombre_curso)
+        
 
         
-     
-        
-        table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
-        dicres={}
-        print('columnas generadas')
-
+        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=2,id_actividad=207)
+        print('taamaanaio')
+        print(len(lista))
         for item in lista.values():
-            print(item)
             dicres={}
+           
+            
             dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_ipress']=item['renipress']
 
             if(item['fecha_atencion'] is None):
@@ -109,10 +108,27 @@ class migracion_con(View):
             dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_cumple']=item['cumple']
            
             dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_id_cita']=item['id_cita']
-            
-            table_i.put(item['numero_documento'],dicres)
+            try:
+                connection=self.crea_coneccion()
+                table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
+                table_i.put(item['numero_documento'],dicres)
+                print(item['numero_documento'])
+                connection.close()
+            except Exception as e:
+                print(e)
+                connection.close()
         
         print(dicres.values())
+        
+
+        
+     
+        
+
+
+            
+        
+        
         
         
         
@@ -155,3 +171,32 @@ class migracion_con(View):
             '''  
            
         return JsonResponse(list(lista.values()),safe=False)
+    def crea_coneccion(self):
+        try:
+            con=  hb.Connection('localhost',port=9090 )
+            con.open()
+            return con
+        except Exception as e:
+            print(e)
+            print('fallo la conneccion')
+    def crea_tabla(self,period,nombre_curs):
+        try:
+            connection=self.crea_coneccion()
+            print ('coneccion')
+            connection.create_table('PERIODO_'+str(period)+':SEGUIMIENTO_'+nombre_curs,{'CMI_2022':{}})
+            connection.close()
+
+        except Exception as e:
+            print(e)
+            connection.close()
+
+    def crea_namespace(self,period,nombre_curs):
+        try:
+            connection=self.crea_coneccion()
+            print ('coneccion')
+            connection.create_namespace('PERIODO_'+str(period)+':SEGUIMIENTO_'+nombre_curs,{'CMI_2022':{}})
+            connection.close()
+
+        except Exception as e:
+            print(e)
+            connection.close()
