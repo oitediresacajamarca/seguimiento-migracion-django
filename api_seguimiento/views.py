@@ -5,19 +5,21 @@ from django.http import JsonResponse
 # Create your views here.
 import happybase as hb
 import json
+import os
 
 
 class consulta(View):
     def get(self, request,agnio,mes,ipress):
         periodo=str(int(agnio)*100+int(mes))
+        lisg={}
         try:
             connection=self.Crea_coneccion()
             
             table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO')
         
         
-            lisg={}
-            for key, data in table_i.scan(filter="SingleColumnValueFilter('291_207','ipress',=, 'binary:000004645')"):
+            
+            for key, data in table_i.scan(filter="SingleColumnValueFilter('291_207','ipress',=, 'binary:000004212')"):
                 dicc_data={}          
                 for key1,data1 in data.items():
                 
@@ -27,6 +29,7 @@ class consulta(View):
             
         except Exception as e:
             print (e)
+            print ('error de coneccion')
             
         
 
@@ -46,7 +49,9 @@ class consulta(View):
     
     def Crea_coneccion(self):
         try:
-            con=hb.Connection('172.18.20.37',port=9090 )
+            print(os.environ.get('SERVER_HBASE'))
+            con=  hb.Connection(os.environ.get('SERVER_HBASE'),port=int(os.environ.get('PORT_HBASE')) )
+            
             return con
         except Exception as e:
             print (e)

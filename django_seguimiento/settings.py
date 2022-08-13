@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,8 +80,8 @@ DATABASES = {
         "ENGINE": "mssql",
         "NAME": "risc_2030",
         "USER": "sa",
-        "PASSWORD": "Intercambio1080",
-        "HOST": "172.18.20.25",
+        "PASSWORD": os.environ.get('PASSWORD_DATABASE'),
+        "HOST": os.environ.get('SERVER_DATABASE'),
         "PORT": "1433",
         'OPTIONS': {
         'driver': 'ODBC Driver 17 for SQL Server',

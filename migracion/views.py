@@ -3,6 +3,7 @@ from .models import SeguimientoNominalNinio
 from django.http import JsonResponse
 from django.views import View
 import happybase as hb
+import os
 
 
 
@@ -173,7 +174,7 @@ class migracion_con(View):
         return JsonResponse(list(lista.values()),safe=False)
     def crea_coneccion(self):
         try:
-            con=  hb.Connection('172.18.20.37',port=9090 )
+            con=  hb.Connection(os.environ.get('SERVER_HBASE'),port=os.environ.get('PORT_HBASE') )
             con.open()
             return con
         except Exception as e:
