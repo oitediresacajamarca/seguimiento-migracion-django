@@ -46,7 +46,7 @@ class consulta(View):
     
     def Crea_coneccion(self):
         try:
-            con=hb.Connection('localhost',port=9090 )
+            con=hb.Connection('172.18.20.37',port=9090 )
             return con
         except Exception as e:
             print (e)

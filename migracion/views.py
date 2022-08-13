@@ -173,7 +173,7 @@ class migracion_con(View):
         return JsonResponse(list(lista.values()),safe=False)
     def crea_coneccion(self):
         try:
-            con=  hb.Connection('localhost',port=9090 )
+            con=  hb.Connection('172.18.20.37',port=9090 )
             con.open()
             return con
         except Exception as e:

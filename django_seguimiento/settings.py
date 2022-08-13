@@ -79,7 +79,7 @@ DATABASES = {
         "ENGINE": "mssql",
         "NAME": "risc_2030",
         "USER": "sa",
-        "PASSWORD": ".",
+        "PASSWORD": "Intercambio1080",
         "HOST": "localhost",
         "PORT": "1433",
         'OPTIONS': {
