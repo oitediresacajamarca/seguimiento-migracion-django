@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'django_seguimiento.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "mssql",
-        "NAME": "172.18.20.25",
+        "NAME": "risc_2030",
         "USER": "sa",
         "PASSWORD": "Intercambio1080",
-        "HOST": "localhost",
+        "HOST": "172.18.20.37",
         "PORT": "1433",
         'OPTIONS': {
         'driver': 'ODBC Driver 17 for SQL Server',
