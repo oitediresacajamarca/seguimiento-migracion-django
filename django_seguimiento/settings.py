@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'django_seguimiento.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "mssql",
-        "NAME": "risc_2030",
+        "NAME": "172.18.20.25",
         "USER": "sa",
         "PASSWORD": "Intercambio1080",
         "HOST": "localhost",
