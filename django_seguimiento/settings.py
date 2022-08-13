@@ -80,7 +80,7 @@ DATABASES = {
         "NAME": "risc_2030",
         "USER": "sa",
         "PASSWORD": "Intercambio1080",
-        "HOST": "172.18.20.37",
+        "HOST": "172.18.20.25",
         "PORT": "1433",
         'OPTIONS': {
         'driver': 'ODBC Driver 17 for SQL Server',
