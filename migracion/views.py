@@ -113,7 +113,7 @@ class migracion_con(View):
                 connection=self.crea_coneccion()
                 table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
                 table_i.put(item['numero_documento'],dicres)
-                print(dicres)
+               
                 connection.close()
             except Exception as e:
                 print(e)
