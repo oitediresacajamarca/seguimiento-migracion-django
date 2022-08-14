@@ -9,7 +9,7 @@ import os
 
 
 class consulta(View):
-    def get(self, request,agnio,mes,ipress):
+    def get(self, request,agnio,mes,ipress,id_indicador):
         periodo=str(int(agnio)*100+int(mes))
         lisg={}
         try:
@@ -19,7 +19,7 @@ class consulta(View):
         
         
             
-            for key, data in table_i.scan(filter="SingleColumnValueFilter('291_207','ipress',=, 'binary:000004212')"):
+            for key, data in table_i.scan(filter="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)  AND (ColumnPrefixFilter('"+id_indicador+"')) "):
                 dicc_data={}          
                 for key1,data1 in data.items():
                 

@@ -78,14 +78,14 @@ class migracion_con(View):
         
 
         
-        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=2,id_actividad=207)
+        lista=SeguimientoNominalNinio.objects.filter(anio=agnio,mes=mes,id_curso_de_vida=id_curso)
         print('taamaanaio')
         print(len(lista))
         for item in lista.values():
             dicres={}
            
             
-            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_ipress']=item['renipress']
+            dicres['CMI_2022:ipress adscripcion']=item['renipress']
 
             if(item['fecha_atencion'] is None):
                 item['fecha_atencion']=''
@@ -113,7 +113,7 @@ class migracion_con(View):
                 connection=self.crea_coneccion()
                 table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
                 table_i.put(item['numero_documento'],dicres)
-                print(item['numero_documento'])
+                print(dicres)
                 connection.close()
             except Exception as e:
                 print(e)
@@ -174,7 +174,7 @@ class migracion_con(View):
         return JsonResponse(list(lista.values()),safe=False)
     def crea_coneccion(self):
         try:
-            con=  hb.Connection(os.environ.get('SERVER_HBASE'),port=os.environ.get('PORT_HBASE') )
+            con=  hb.Connection(os.environ.get('SERVER_HBASE'),port=int(os.environ.get('PORT_HBASE')) )
             con.open()
             return con
         except Exception as e:
@@ -188,6 +188,7 @@ class migracion_con(View):
             connection.close()
 
         except Exception as e:
+            print('no se creo la tabla')
             print(e)
             connection.close()
 
