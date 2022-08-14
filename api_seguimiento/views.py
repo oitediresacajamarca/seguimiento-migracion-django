@@ -15,7 +15,7 @@ class consulta(View):
         try:
             connection=self.Crea_coneccion()
             
-            table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO'+curso)
+            table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+curso)
         
         
             
