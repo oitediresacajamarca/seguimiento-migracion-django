@@ -9,13 +9,13 @@ import os
 
 
 class consulta(View):
-    def get(self, request,agnio,mes,ipress,id_indicador):
+    def get(self, request,agnio,mes,ipress,id_indicador,curso):
         periodo=str(int(agnio)*100+int(mes))
         lisg={}
         try:
             connection=self.Crea_coneccion()
             
-            table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_NINIO')
+            table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO'+curso)
         
         
             
