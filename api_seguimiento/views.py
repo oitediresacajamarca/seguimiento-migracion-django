@@ -19,7 +19,7 @@ class consulta(View):
             table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+curso)
         
         
-            filter_text="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)  AND (ColumnPrefixFilter('"+id_indicador+"'))"
+            filter_text="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true) "
             print(filter_text)
             for key, data in table_i.scan(filter=filter_text):
           
@@ -33,20 +33,23 @@ class consulta(View):
                     existe=False
                     print(key1)
                     indice_encontrar=1000
-                    for i in range(0, len(activida)):
-                        print(activida[i])
 
-                        if activida[i]["indicador"]== indices[1]:
-                            existe=True 
-                            indice_encontrar=i
-                            activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
-                           
-                        else:
-                            existe=False
-                    
-                    if existe==False:
-                        activida.append({"indicador":indices[1]})
-                        activida[len(activida)-1][indices[2]]=data1.decode('utf-8')
+                    if indices[0]==id_indicador:
+                        for i in range(0, len(activida)):
+                            print(activida[i])
+                        
+
+                            if activida[i]["indicador"]== indices[1]:
+                                existe=True 
+                                indice_encontrar=i
+                                activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
+                            
+                            else:
+                                existe=False
+                        
+                        if existe==False:
+                            activida.append({"indicador":indices[1]})
+                            activida[len(activida)-1][indices[2]]=data1.decode('utf-8')
                             
                   
                         
