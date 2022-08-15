@@ -39,14 +39,12 @@ class consulta(View):
                         if activida[i]["indicador"]== indices[1]:
                             existe=True 
                             indice_encontrar=i
-                            print('si existe'+str(indice_encontrar))
                             activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
                            
                         else:
                             existe=False
                     
                     if existe==False:
-                        print('no existe')
                         activida.append({"indicador":indices[1]})
                         activida[len(activida)-1][indices[2]]=data1.decode('utf-8')
                             
@@ -56,7 +54,7 @@ class consulta(View):
 
 
 
-                lisg.append({'numero_dcoumento':key.decode('utf-8'),'actividades':activida})
+                lisg.append({'numero_documento':key.decode('utf-8'),'actividades':activida})
          
             connection.close()
             
@@ -87,6 +85,7 @@ class consulta(View):
             
             return con
         except Exception as e:
+            print('error de coneccion')
             print (e)
             con.close()
 
