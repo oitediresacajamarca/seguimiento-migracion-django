@@ -12,7 +12,7 @@ class consulta(View):
     separador='$'
     def get(self, request,agnio,mes,ipress,id_indicador,curso):
         periodo=str(int(agnio)*100+int(mes))
-        lisg={}
+        lisg=[]
         try:
             connection=self.Crea_coneccion()
             
@@ -56,8 +56,8 @@ class consulta(View):
 
 
 
-             
-                lisg[key.decode('utf-8')] =activida
+                lisg.append({'numero_dcoumento':key.decode('utf-8'),'actividades':activida})
+         
             connection.close()
             
         except Exception as e:
