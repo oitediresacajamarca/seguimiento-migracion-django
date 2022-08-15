@@ -1,3 +1,4 @@
+from tkinter.ttk import Separator
 from django.shortcuts import render
 from .models import SeguimientoNominalNinio
 from django.http import JsonResponse
@@ -18,6 +19,7 @@ import os
 
 
 class migracion_con(View):
+    separador='$'
     
     def get(self,request,agnio,mes,id_curso):
         print(id_curso)
@@ -104,11 +106,11 @@ class migracion_con(View):
 
             
             
-            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_fecha atencion']=item['fecha_atencion']
+            dicres['CMI_2022:'+str(item['id_indicador'])+self.separador+str(item['id_actividad'])+self.separador+'fecha atencion']=item['fecha_atencion']
             
-            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_cumple']=item['cumple']
+            dicres['CMI_2022:'+str(item['id_indicador'])+self.separador+str(item['id_actividad'])+self.separador+'cumple']=item['cumple']
            
-            dicres['CMI_2022:'+str(item['id_indicador'])+'_'+str(item['id_actividad'])+'_id_cita']=item['id_cita']
+            dicres['CMI_2022:'+str(item['id_indicador'])+self.separador+str(item['id_actividad'])+self.separador+'id_cita']=item['id_cita']
             try:
                 connection=self.crea_coneccion()
                 table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+nombre_curso)
@@ -116,6 +118,7 @@ class migracion_con(View):
                
                 connection.close()
             except Exception as e:
+                print('error '+item['numero_documento'])
                 print(e)
                 connection.close()
         

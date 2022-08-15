@@ -9,6 +9,7 @@ import os
 
 
 class consulta(View):
+    separador='$'
     def get(self, request,agnio,mes,ipress,id_indicador,curso):
         periodo=str(int(agnio)*100+int(mes))
         lisg={}
@@ -18,13 +19,45 @@ class consulta(View):
             table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+curso)
         
         
-            
-            for key, data in table_i.scan(filter="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)  AND (ColumnPrefixFilter('"+id_indicador+"')) "):
-                dicc_data={}          
+            filter_text="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)  AND (ColumnPrefixFilter('"+id_indicador+"'))"
+            print(filter_text)
+            for key, data in table_i.scan(filter=filter_text):
+          
+              
+                activida=[]
                 for key1,data1 in data.items():
-                
-                    dicc_data[key1.decode('utf-8')]=data1.decode('utf-8')
-                    lisg[key.decode('utf-8')] =dicc_data
+                    
+                    indices=key1.decode('utf-8').split('$')
+                    indicador=indices[1]
+                    campo= indices[2]
+                    existe=False
+                    print(key1)
+                    indice_encontrar=1000
+                    for i in range(0, len(activida)):
+                        print(activida[i])
+
+                        if activida[i]["indicador"]== indices[1]:
+                            existe=True 
+                            indice_encontrar=i
+                            print('si existe'+str(indice_encontrar))
+                            activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
+                           
+                        else:
+                            existe=False
+                    
+                    if existe==False:
+                        print('no existe')
+                        activida.append({"indicador":indices[1]})
+                        activida[len(activida)-1][indices[2]]=data1.decode('utf-8')
+                            
+                  
+                        
+                       
+
+
+
+             
+                lisg[key.decode('utf-8')] =activida
             connection.close()
             
         except Exception as e:
@@ -45,7 +78,7 @@ class consulta(View):
             '''
 
 
-        return JsonResponse(list(lisg.items()),safe=False)
+        return JsonResponse(lisg,safe=False)
     
     def Crea_coneccion(self):
         try:
