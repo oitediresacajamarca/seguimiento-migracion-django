@@ -33,11 +33,11 @@ class consulta(View):
                     existe=False
                     print(key1)
                     indice_encontrar=1000
+                    print (id_indicador)
 
                     if indices[0]==id_indicador:
                         for i in range(0, len(activida)):
-                            print(activida[i])
-                        
+                                                   
 
                             if activida[i]["indicador"]== indices[1]:
                                 existe=True 
