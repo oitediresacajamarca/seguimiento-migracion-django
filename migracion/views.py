@@ -118,7 +118,7 @@ class migracion_con(View):
                
                 connection.close()
             except Exception as e:
-                print('error '+item['numero_documento'])
+                print('error '+str(item['numero_documento']))
                 print(e)
                 connection.close()
         
