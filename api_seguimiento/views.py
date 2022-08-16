@@ -19,7 +19,7 @@ class consulta(View):
             table_i= connection.table('PERIODO_'+str(periodo)+':SEGUIMIENTO_'+curso)
         
         
-            filter_text="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)"
+            filter_text="SingleColumnValueFilter('CMI_2022','ipress adscripcion',=, 'binary:"+ipress+"',true,true)  AND (ColumnPrefixFilter('"+id_indicador+"'))"
             print(filter_text)
             for key, data in table_i.scan(filter=filter_text):
           
@@ -39,7 +39,7 @@ class consulta(View):
                         print(activida[i])
                       
 
-                        if activida[i]["indicador"]== indices[1] :
+                        if activida[i]["indicador"]== indices[1]:
                             existe=True 
                             indice_encontrar=i
                             activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
@@ -47,7 +47,7 @@ class consulta(View):
                         else:
                             existe=False
                     
-                    if existe==False and id_indicador==indices[0]:
+                    if existe==False:
                         activida.append({"indicador":indices[1]})
                         activida[len(activida)-1][indices[2]]=data1.decode('utf-8')
                             
