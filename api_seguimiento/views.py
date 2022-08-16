@@ -39,7 +39,7 @@ class consulta(View):
                         print(activida[i])
                       
 
-                        if activida[i]["indicador"]== indices[1] and id_indicador==indices[0]:
+                        if activida[i]["indicador"]== indices[1] :
                             existe=True 
                             indice_encontrar=i
                             activida[indice_encontrar][indices[2]]=data1.decode('utf-8')                    
